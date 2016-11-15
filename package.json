@@ -1,0 +1,21 @@
+{
+  "name": "multiple-video-player",
+  "version": "0.1.0",
+  "description": "A gesture based multiple video player",
+
+  "author": "Chi-An Wang",
+
+  "devDependencies": { 
+    "jshint-stylish": "~1.0.0",
+    "gulp-cssmin": "~0.1.6",
+    "gulp-ruby-sass": "~0.7.1",
+    "gulp": "~3.8.9",
+    "gulp-uglify": "~1.0.1",
+    "gulp-jshint": "~1.8.6",
+    "gulp-browserify": "~0.5.0",
+    "gulp-rename": "~1.2.0",
+    "gulp-webserver": "~0.8.4",
+    "gulp-filter":"~1.0.2",
+    "gulp-clean": "~0.3.1"
+  }
+}
