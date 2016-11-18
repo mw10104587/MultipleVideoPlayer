@@ -14,9 +14,9 @@ I am not sure about the scenario when users are going to use gesture to control 
 ### The gestures
 I categorized gestures into several categories. 
 - Gestures that could be executed right away without specifying which video they're refering to.
-| Function      | Gesture |
-| ------------- | ------- |
-| Add           | A       |
+| Function| Gesture |
+|-----|-----|
+| Add Video | A |
 
 
 
