@@ -27,12 +27,7 @@ gulp.task('hint', function() {
 
 });
 
-gulp.task('sass', function() {
 
-	gulp.src('app/scss/**/*.scss')
-		.pipe(sass())
-		.pipe(gulp.dest('app/css'));
-});
 
 if(do_browserify) // there's a better way to do this
 {

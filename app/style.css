@@ -1,0 +1,46 @@
+body{
+	margin: 0;
+}
+
+
+.container{
+	margin-top: 75px;
+}
+
+#subui-wrap{
+	position: absolute;
+	top: 20px;
+	left: 20px;
+}
+
+.subui{
+	width: 100px;
+	height: 100px;
+	/*background-color: red;*/
+	float: left;
+	margin-right: 5px;
+	text-align: center;
+	line-height: 185px;
+}
+
+.video-overlay {
+    /*background-color: transparent;*/
+    background-color: rgba(0,0,0,0.2);
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.video-wrap{
+	float: left;
+	position: relative;
+}
+
+#canvas-wrap{
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 1000;
+}
+

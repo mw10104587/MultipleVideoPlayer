@@ -7,16 +7,44 @@
 	<meta name="viewport" content="width=device-width" >
 	<meta name="description" content="A gesture based multiple video player">
 
-	<link rel="stylesheet" href="css/index.css">
+	<link rel="stylesheet" href="style.css">
+
+	<script
+  src="https://code.jquery.com/jquery-3.1.1.js"
+  integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA="
+  crossorigin="anonymous"></script>
+	<script type="text/javascript" src="lib/dollar.js"></script>
 
 </head>
-<body>
+<body onload="onLoadEvent()">
 
 	<div style="width:50%; margin:auto;">
 		<h1 style="text-align:center; font:sans-serif 5em;">Multiple Video Player</h1>
 	</div>
+	<div id="canvas-wrap">
+		<canvas id="input-canvas" onmousemove="mouseMoveEvent(event.clientX, event.clientY)" onmouseup="mouseUpEvent(event.clientX, event.clientY)" oncontextmenu="return false;">
+			<span style="background-color:#ffff88;">The &lt;canvas&gt; element is not supported by this browser.</span>
+		</canvas>
+	</div>
+	<div id="subui-wrap">
+		<div id="seek-hint" class="subui" style="background-image: url(resource/seek.png); background-size: cover;">Seek</div>
+		<div id="volume-hint" class="subui" style="background-image: url(resource/volume.png); background-size: cover;">Volume</div>
+		<div id="playback-rate-hint" class="subui" style="background-image: url(resource/speed.png); background-size: cover;">Speed</div>
+		<div id="size-hint" class="subui" style="background-image: url(resource/size.png); background-size: cover;">Size</div>
+	</div>
 
-	<script src="bundle.js"></script>
+	<div class="container">
+	</div>
+
+<!-- 	<div id="video-source">
+		<video id="video" controls="" preload="none" mediagroup="myVideoGroup" poster="http://images2.itechpost.com/data/images/full/37245/piko-taro-ppap.jpg">
+			<source id="src-mp4" src="https://video.xx.fbcdn.net/v/t43.1792-2/14439457_1670493943279877_6211803525098242048_n.mp4?efg=eyJybHIiOjE1MDAsInJsYSI6MTAyNCwidmVuY29kZV90YWciOiJzdmVfaGQifQ%3D%3D&rl=1500&vabr=846&oh=8752f9aed4970de1dbb4d0e9201be357&oe=582BA419" type="video/mp4">
+		</video>
+	</div>
+ -->
+
+
+	<!-- <script src="bundle.js"></script> -->
 	<script type="text/javascript" src="script.js"></script>
 </body>
 </html>
