@@ -9,6 +9,12 @@ Open up [index.html](./html).
 There are only **3** dependencies for this file.
 2 js files including `script.js` and `dollar.js`.
 1 css file: `style.css`
+```PLEASE USE THE LATEST VERSION OF BROWSER TO SUPPORT ES6 CODE```
+
+
+## Simple Demo Video
+[Youtube Link](https://youtu.be/Pza9aVqnEUU)
+
 
 ## Design Process
 ### The video interface
@@ -51,6 +57,7 @@ For play and pause, I believe because it is very intuitive that you play with a 
 
 
 - Gestures that could specify the kind of operations we want to do one a certain subset of videos. These features are like the second round of spcification about what feature of the current focused video we want to modify. They are all continuous values here. This is related to the design decision I made for the following section of operations.
+Also, here I put resizing the height and width into a resize function. For me, I don't think it is particularly useful to set them seperately. It is not hard to implement, it's just weird.
 
 | Function   |   Gesture   |
 |------------|-------------|
@@ -99,7 +106,7 @@ During the design process, I tried to make all of the gesture as intuitive as po
 
 
 #### User control and freedom
-In this app, we don't really redirect the user to another page or popup view, so I didn't support any sort of emergency exit since there's no other place they can go. This app doesn't support redo and undo, BAD.
+In this app, we don't really redirect the user to another page or popup view, so I didn't support any sort of emergency exit since there's no other place they can go. This app doesn't support redo and undo since most operations could be done again easily.
 
 
 #### Consistency and standards
@@ -124,9 +131,9 @@ To save more space for the videos, I decided to use keep the top message bar imp
 
 
 #### Help users recognize, diagnose, and recover from errors
-When the error mentioned above(operate on videos with videos) happens, we tell the user what the problem was and how to solve it. 
+When the error mentioned above(operate on videos with no videos in view) happens, we tell the user what the problem was and how to solve it. 
 
 
 #### Help and documentation
-By drawing a 'Q', we will show a simple tutorial for two cases of using this application.
+By drawing a 'Q', we will show a simple tutorial for two cases of using this application. 
 
