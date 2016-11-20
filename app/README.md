@@ -85,6 +85,46 @@ A, A, Circle, Triangle, ->, ->, zig-zag, ^
 ```
 
 
-
-
 ## Heuristic Analysis
+#### Visibility of system status
+In order to provide user with realtime update about where they are navigating, what the status is and what other gesture they can use, I decided to:
+- Show a header bar that tells people what their gesture has done.
+Some times when user is interacting with multiple videos, they get confused and lost. To prvent this kind of situation, I will darken the image and brighten it(highlighting) so the user knows which video they are controlling.
+
+
+#### Match between system and the real world
+During the design process, I tried to make all of the gesture as intuitive as possible. For exmample, people use a triangle to represent play and use a square to indicate stop on music players. Another important decision is that I categorized several features as `numeric values` that could be modified using a similar operation. These operation include **size**, **volume**, **play time** and **playback rate**. By using v and ^, user can increase and decrease the corresponding feature of a/all video. For several operations, I used the first character of its word as operation, such as **Add**, **Delete** and **Mute**. However, the gestures that specifies the feature (**speed**, **playback rate**, **size** and **play time**) are indeed a little confusing. Also, I would say that there are too many gestures. 
+
+
+#### User control and freedom
+In this app, we don't really redirect the user to another page or popup view, so I didn't support any sort of emergency exit since there's no other place they can go. This app doesn't support redo and undo, BAD.
+
+
+#### Consistency and standards
+On this video player, there are really not much interaction people can do besides trying to put down a certain gesture. I really like how I used gesture images to show the available gestures, I would say it is pretty consistent, but in a rough way.
+
+
+#### Error Prevention
+Sometimes when users are excited to play the video but forgot to add a video first, we would check if there are videos in the current view. 
+
+
+#### Recognition rather than recall
+Due to the heavy loading of gestures that this video player user will have to recognize, I decided to list all the operations that a user can do under each circumstances. This helps user 
+
+
+#### Flexibility and efficiency of use
+Sometimes when a user want to add multiple video at the same time, let's say 20, it would require them to write `A` 20 times. To solve this problem, I gave novice users the ability to add four videos at the same time by writing `4` on the screen. This saves people a lot of time.
+Also, the original requirement of operating on all videos, gives the user the ability to control all video at the same time.
+
+
+#### Aesthetic and minimalist design
+To save more space for the videos, I decided to use keep the top message bar implementation from [$1](https://depts.washington.edu/aimgroup/proj/dollar/). The advantage of this is that it only display information at the top, also I remove the information after 5 seconds of the last gesture.
+
+
+#### Help users recognize, diagnose, and recover from errors
+When the error mentioned above(operate on videos with videos) happens, we tell the user what the problem was and how to solve it. 
+
+
+#### Help and documentation
+By drawing a 'Q', we will show a simple tutorial for two cases of using this application.
+

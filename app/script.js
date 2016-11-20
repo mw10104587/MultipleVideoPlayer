@@ -7,15 +7,19 @@ const IC = {
 	*/
 	init: function(){
 
-		console.log('my init');
+		console.log('Init canvas settings...');
 
 		this.canvas = document.getElementById("canvas-wrap").querySelector("canvas");
 		this.canvas.width  = screen.width;
 		this.canvas.height = screen.height;
 
 		this.canvas.addEventListener("mousedown", function(e){
-			// console.log(e.clientX);	
 			mouseDownEvent(e.clientX, e.clientY);
+		});
+
+		document.getElementById("tutorial-overlay").addEventListener("click", function(){
+			this.style.opacity = 0;
+			this.style.zIndex = 999;
 		});
 
 	},
@@ -26,7 +30,60 @@ const IC = {
 	SINGLE_OP_GESTURES: ["play", "delete", "pause", "mute", "triangle"],
 	SUBUI_GESTURES: ["size", "volume", "volume2","playbackSpeed", "seek"],
 	VALUE_SELECTION_GESTURES: ["up", "down"],
+	showQuestion: function() {
 
+		const questionOverlay = document.getElementById("tutorial-overlay");
+		let opacity = 0.1;
+		let showQuestionToken = setInterval(function(){
+			if ( opacity > 1) {
+
+				clearInterval(showQuestionToken);
+				questionOverlay.style.zIndex = 1001;
+				return;
+			
+			} else {
+				questionOverlay.style.opacity = opacity;
+				opacity += 0.1;
+			}
+			
+		}, 50)
+		
+
+	},
+	showSelectUIHint: function(){
+		const hints = document.getElementsByClassName("hint-wrap");
+		Array.prototype.forEach.call( hints, function(hintWrap){
+			if ( hintWrap.id === "selectui-wrap" || hintWrap.id === "single-op-wrap" ) {
+				hintWrap.style.opacity = 1;
+			} else {
+				hintWrap.style.opacity = 0;
+			}
+		});
+	},
+	showSubUIHint: function(){
+		const hints = document.getElementsByClassName("hint-wrap");
+		Array.prototype.forEach.call( hints, function( hintWrap ) {
+
+			if ( hintWrap.id === "subui-wrap" || hintWrap.id === "single-op-wrap" ) {
+				hintWrap.style.opacity = 1;
+			} else {
+				hintWrap.style.opacity = 0;
+			}
+		});
+	},
+	showValueSelectionHint: function(){
+		const hints = document.getElementsByClassName("hint-wrap");
+		Array.prototype.forEach.call( hints, function( hintWrap ) {
+
+			if ( hintWrap.id === "numeric-ui-wrap" || hintWrap.id === "single-op-wrap" ) {
+				hintWrap.style.opacity = 1;
+			} else {
+				hintWrap.style.opacity = 0;
+			}
+
+		});
+
+	},
 	clearSubUI: function(){
 
 		this.inSubUI = false;
@@ -37,20 +94,26 @@ const IC = {
 
 		if ( VC.videos.length === 0 ){
 			// nothing should happen
+			drawText("Please add a video first");
 			return;
 		}
 
 		if ( !VC.hasFocusVideo() ){
+			
+			drawText("Now you can control the first video");
+
 			// focus on the first one
 			VC._highlightVideo(VC.videos[0].id);
 
 			// put the first video into the current focus queue.
 			VC.currentFocusVideos.push(VC.videos[0]);
 
+
 		} else {
 				
 			if ( VC.currentFocusVideos.length > 1 ) {
 
+				drawText("Now you can control the first video");
 				// remove all focus
 				VC.currentFocusVideos.length = 0;
 
@@ -63,7 +126,17 @@ const IC = {
 				// move to the next one
 				// find the current highlighted in the videos list and move to the next one and highlight it
 				const currentFocusIndex = VC.videos.findIndex( (a) => (a.id === VC.currentFocusVideos[0].id ));
-				if ( currentFocusIndex + 1 >= VC.videos.length ) return;
+				if ( currentFocusIndex + 1 >= VC.videos.length ) {
+					// go back to the first video
+					drawText("Now you can control the first video");
+
+					VC.currentFocusVideos = [VC.videos[0]];
+					VC._highlightVideo( VC.videos[0].id );
+					return;
+
+				}
+
+				drawText(`Now you can control video number ${currentFocusIndex + 2}`);
 
 				VC.currentFocusVideos.splice(0, 1);
 				VC.currentFocusVideos.push(VC.videos[currentFocusIndex + 1]);
@@ -83,6 +156,9 @@ const IC = {
 	},
 	all: function(){
 		
+
+		drawText("Now you can control all the videos");
+
 		// remove everything from currentFocusVideos
 		VC._clearCurrentFocusVideos();
 
@@ -92,42 +168,66 @@ const IC = {
 
 			// focus it
 			VC._highlightVideo(VC.videos[i].id);
-
 		}
-
 	},
 	play: function(){
+
+		let focusVideoText = "one";
+		if ( VC.currentFocusVideos.length > 1 ) focusVideoText = "all";
+		drawText(`Played ${focusVideoText} video.`);
+
 		// play all the video that's currently in the focus
 		VC.currentFocusVideos.forEach(function( videoObject ){
 			VC._playVideo(videoObject.id);
 		});
 
-		VC._clearCurrentFocusVideos();
+		// VC._clearCurrentFocusVideos();
 	},
 	delete: function(){
+
+		let focusVideoText = "one";
+		if ( VC.currentFocusVideos.length > 1 ) focusVideoText = "all";
+
+		drawText(`Deleted ${focusVideoText} video.`);
 
 		for (let i = VC.currentFocusVideos.length-1; i > -1; i--) {
 			const videoObject = VC.currentFocusVideos[i];
 			VC._removeVideo(videoObject.id);
 		}
 
-		VC._clearCurrentFocusVideos();	
+		VC._clearCurrentFocusVideos();
 	},
 	pause: function(){
+
+		let focusVideoText = "one";
+		if ( VC.currentFocusVideos.length > 1 ) focusVideoText = "all";
+		drawText(`Paused ${focusVideoText} video.`);
+
 		VC.currentFocusVideos.forEach(function( videoObject ){
 			VC._pauseVideo(videoObject.id);
 		});
 
-		VC._clearCurrentFocusVideos();		
+		// VC._clearCurrentFocusVideos();
 	}, 
+	mute: function(){
+		let focusVideoText = "one";
+		if (VC.currentFocusVideos.length > 1) focusVideoText = "all";
+		drawText(`Muted ${focusVideoText} video`);
 
+		VC.currentFocusVideos.forEach(function( videoObject ){
+			VC._muteVideo( videoObject.id );
+		});
+
+	},
 	/******* Sub UI functions ********/
 	// These gesture would activate the up and down listener...
 	activateSize: function(){
 		// this function would only be called when the user drew a star
+
+		drawText("Now you can control the size of the selected video");
 		this.inSubUI = true;
 		this.subUI = "size";
-		console.log('[SubUI] size listening...');
+
 	},
 	resize: function( up ){
 		VC.currentFocusVideos.forEach(function( videoObject ){
@@ -135,31 +235,52 @@ const IC = {
 		});
 	},
 	activateVolume: function(){
+
+		drawText("Now you can control the volume of the selected video");
 		this.inSubUI = true;
 		this.subUI = "volume";
 		console.log('[SubUI] volume listening...');
 	},
 	volume: function( up ){
+
+		let focusVideoText = "one";
+		if ( VC.currentFocusVideos.length > 1 ) focusVideoText = "all";
+		drawText(`Set volume for ${focusVideoText} video.`);
+
 		VC.currentFocusVideos.forEach(function( videoObject ){
 			VC._setVideoVolume(videoObject.id, up);
 		});
 	},
 	activatePlaybackSpeed: function(){
+
+		drawText("Now you can control the playback speed of the selected video");
 		this.inSubUI = true;
 		this.subUI = "playbackSpeed";
 		console.log('[SubUI] playbackSpeed listening...');
 	},
 	playbackSpeed: function(up){
+
+		let focusVideoText = "one";
+		if ( VC.currentFocusVideos.length > 1 ) focusVideoText = "all";
+		drawText(`Set speed for ${focusVideoText} video.`);
+
 		VC.currentFocusVideos.forEach(function( videoObject ){
 			VC._setVideoPlaybackSpeed(videoObject.id, up);
 		});
 	},
 	activateSeek: function(){
+		
+		drawText("Now you can control the current display time of the selected video");
 		this.inSubUI = true;
 		this.subUI = "seek";
 		console.log('[SubUI] seek listening...');
 	},
 	seek: function( up ) {
+
+		let focusVideoText = "one";
+		if ( VC.currentFocusVideos.length > 1 ) focusVideoText = "all";
+		drawText(`Set current playing time for ${focusVideoText} video.`);
+
 		VC.currentFocusVideos.forEach(function(videoObject){
 			VC._setVideoSeek(videoObject.id, up);
 		});
@@ -195,7 +316,13 @@ const VC = {
 		// 	<source id="src-mp4" src="https://video.xx.fbcdn.net/v/t43.1792-2/14439457_1670493943279877_6211803525098242048_n.mp4?efg=eyJybHIiOjE1MDAsInJsYSI6MTAyNCwidmVuY29kZV90YWciOiJzdmVfaGQifQ%3D%3D&rl=1500&vabr=846&oh=8752f9aed4970de1dbb4d0e9201be357&oe=582BA419" type="video/mp4">
 		// </video>
 
-		const POSTER_URL = "http://images2.itechpost.com/data/images/full/37245/piko-taro-ppap.jpg";
+		drawText(`Added one video.`);
+
+		// remove the hello message
+		document.getElementById("hello-msg").style.display = "none";
+
+		// const POSTER_URL = "http://images2.itechpost.com/data/images/full/37245/piko-taro-ppap.jpg";
+		const POSTER_URL = "resource/ppap-poster.jpg";
 
 		let videoWrap = document.createElement("div");
 		videoWrap.setAttribute("class", "video-wrap");
@@ -215,14 +342,10 @@ const VC = {
 		video.width = this.videoWidth;
 		video.src = "./resource/ppap.mp4";
 		video.autoplay = false;
-		// video.addEventListener("loadeddata", function(){
-		// 	console.log('video loaded');
-		// }, false);
 
 		videoWrap.appendChild(videoOverlay);
 		videoWrap.appendChild(video);
 		this.videoContainer.appendChild(videoWrap);
-
 
 		const videoID = this._getID();
 		this.videos.push({
@@ -250,6 +373,12 @@ const VC = {
 	},
 	_setVideoSize: function( id, up ) {
 
+		if ( up ) {
+			drawText("Enlarge the selected video");
+		} else {
+			drawText("Shrink the selected video");
+		}
+
 		const videoObject = this._findVideoWithID( id );
 		const videoWrap = videoObject.dom;
 		const video = videoWrap.querySelector("video");
@@ -267,6 +396,12 @@ const VC = {
 	},
 	_setVideoVolume: function( id, up ) {
 
+		if ( up ) {
+			drawText("Louder!!");
+		} else {
+			drawText("Quiet!!");
+		}
+
 		const videoObject = this._findVideoWithID( id );
 		const videoWrap = videoObject.dom;
 		const video = videoWrap.querySelector("video");
@@ -277,6 +412,12 @@ const VC = {
 
 	},
 	_setVideoPlaybackSpeed: function( id, up ) {
+
+		if ( up ) {
+			drawText("Set faster speed for selected video!!");
+		} else {
+			drawText("Set slower speed for selected video!!");
+		}
 
 		const videoObject = this._findVideoWithID( id );
 		const videoWrap = videoObject.dom;
@@ -297,6 +438,12 @@ const VC = {
 
 	},
 	_setVideoSeek: function( id, up ) {
+
+		if ( up ) {
+			drawText("Fastforward the selected video!!");
+		} else {
+			drawText("Rewind the selected video!!");
+		}
 
 		const videoObject = this._findVideoWithID( id );
 		const videoWrap = videoObject.dom;
@@ -326,6 +473,10 @@ const VC = {
 		}
 		// VC._clearCurrentFocusVideos();
 
+		if ( VC.videos.length === 0 ) {
+			document.getElementById("hello-msg").style.display = "table";
+		}
+
 	},
 	_playVideo: function( id ) {
 		let videoObject = this._findVideoWithID(id);
@@ -351,52 +502,47 @@ const VC = {
 		const videoWidth = videoWrap.querySelector("video").getBoundingClientRect().width;
 		let overlay = videoWrap.querySelector("div");
 		overlay.style.cssText = overlay.style.cssText + `width:${videoWidth}px; height: ${videoHeight}px;`;
-		overlay.style.opacity = 1;
+		overlay.style.opacity = 0;
 
 		let stopAnimation = false;
 
-		let fadeOut = function( videoObject ){
+		let fadeIn = function( videoObject ){
 			let overlay = videoObject.dom.querySelector("div");
 			let _opacity = 1;
 
-			let fadeOutToken = setInterval(function(){
-				if (_opacity > -0.05){
+			let fadeInToken = setInterval(function(){
+				if (_opacity > 0){
+					_opacity -= 0.1;
 					overlay.style.opacity = _opacity;
-					_opacity -= 0.05;
 				}else{
-					clearInterval(fadeOutToken);
+					clearInterval(fadeInToken);
 					overlay.style.opacity = 0;
-					if (!stopAnimation){
-						fadeIn(videoObject);
-					}
+					// if (!stopAnimation){
+					// fadeIn(videoObject);
+					// }
 				}
 			}, 50);
 
-		
-		}
+		};
 
-		let fadeIn = function( videoObject ) {
+		let fadeOut = function( videoObject ) {
 			let overlay = videoObject.dom.querySelector("div");
 			let _opacity = 0; 
-
-			let fadeInToken = setInterval(function(){
+			let fadeOutToken = setInterval(function(){
 				if ( _opacity <= 1){
+					
+					_opacity += 0.1;
 					overlay.style.opacity = _opacity;
-					_opacity += 0.05;
+					
 				} else {
-					clearInterval(fadeInToken);
-					fadeOut(videoObject);	
+					overlay.style.opacity = 1;
+					clearInterval(fadeOutToken);
+					fadeIn(videoObject);	
 				} 
 			}, 50);
-
-		}
+		};
 
 		fadeOut(videoObject);
-
-		setTimeout( function(){
-			stopAnimation = true;
-
-		}, 5000);
 
 	},
 	_unhighlightVideo: function( id ){
@@ -430,7 +576,7 @@ var _isDown, _points, _r, _g, _rc;
 
 function onLoadEvent() {
 
-	console.log('on load event');
+	console.log('Page on load...');
 	_points = new Array();
 	_r = new DollarRecognizer();
 
@@ -510,15 +656,39 @@ function mouseUpEvent( x, y ){
 
 		_isDown = false;
 		if ( _points.length >= 10 ) {
-			var result = _r.Recognize(_points, false /*document.getElementById('useProtractor').checked*/);
-			drawText("Result: " + result.Name + " (" + round(result.Score,2) + ").");
 
-			if (result.Name === "add") {
-				VC._addVideo();
+			var result = _r.Recognize(_points, false /*document.getElementById('useProtractor').checked*/);
+			// drawText("Result: " + result.Name + " (" + round(result.Score,2) + ").");
+
+			if (result.Name === "question") {
+				IC.showQuestion();
+			}
+
+			else if (result.Name === "add" || result.Name === "four" ) {
+
+				IC.showSelectUIHint();
+				if ( result.Name === "add" ) { 
+					VC._addVideo();
+				} else {
+					for ( let i = 0; i < 4; i++ ) {
+						VC._addVideo();
+					}
+				}
+				
+				
+			
 			} else {
 				// focus type
-				if (IC.FOCUS_GESTURES.indexOf(result.Name) >= 0 ) {
-				// if ( result.Name == "arrow" || result.Name == "all" || result.Name == "all2") {
+
+				// check there are videos in the current stack
+				if ( VC.videos.length === 0 ) {
+					drawText("Please draw A to add a video first");
+					return;
+				}
+
+				if ( IC.FOCUS_GESTURES.indexOf(result.Name) >= 0 ) {
+
+					IC.showSubUIHint();
 
 					// move the current focus or go to the first focus
 					if ( result.Name == "arrow" ){
@@ -533,41 +703,27 @@ function mouseUpEvent( x, y ){
 				// Sub UI Type
 				} else if ( IC.SUBUI_GESTURES.indexOf(result.Name) >= 0 ) {
 
-					if ( result.Name === "size" ) {
-						IC.activateSize();
-					}
-
-					if ( result.Name === "volume" || result.Name === "volume2") {
-						IC.activateVolume();
-					}
-
-					if ( result.Name === "playbackSpeed" ) {
-						IC.activatePlaybackSpeed();
-					}
-
-					if ( result.Name === "seek" ) {
-						IC.activateSeek();
-					}
+					IC.showValueSelectionHint();
+					if ( result.Name === "size" ) 			IC.activateSize();
+					if ( result.Name === "playbackSpeed" )  IC.activatePlaybackSpeed();
+					if ( result.Name === "seek" ) 			IC.activateSeek();
+					if ( result.Name === "volume" || result.Name === "volume2") IC.activateVolume();
 
 				// execution type
 				} else if ( IC.SINGLE_OP_GESTURES.indexOf(result.Name) >= 0 ) {
 
-					if ( result.Name === "play" || result.Name === "triangle"){
-						IC.play();
-					}
+					IC.showSubUIHint();
+					if ( result.Name === "delete" ) IC.delete();
+					if ( result.Name === "pause" )  IC.pause();
+					if ( result.Name === "mute" )   IC.mute();
+					if ( result.Name === "play" || result.Name === "triangle") IC.play(); 
 
-					if ( result.Name === "delete" ){
-						IC.delete();
-					}
-
-					if ( result.Name === "pause" ){
-						IC.pause();
-					}
 				// up and down
 				} else {
 					
 					let up = false;
 					if ( result.Name === "up") up = true;
+
 					switch (IC.subUI) {
 						case "size":
 							IC.resize(up);
@@ -588,8 +744,6 @@ function mouseUpEvent( x, y ){
 						default:
 							break;
 					}
-
-
 
 				}
 			}
@@ -644,27 +798,9 @@ function onClickAddExisting() {
 	}
 }
 
-function onClickAddCustom(){
-	var name = document.getElementById('custom').value;
-	if (_points.length >= 10 && name.length > 0){
-		var num = _r.AddGesture(name, _points);
-		drawText("\"" + name + "\" added. Number of \"" + name + "\"s defined: " + num + ".");
-	}
-}
-
-function onClickCustom() {
-	document.getElementById('custom').select();
-}
-
 function onClickDelete(){
 	var num = _r.DeleteUserGestures(); // deletes any user-defined unistrokes
 	alert("All user-defined gestures have been deleted. Only the 1 predefined gesture remains for each of the " + num + " types.");
 }
 
 
-/**
-A function that helps y
-*/
-let showSubUIHint = function(){
-
-}

@@ -7,11 +7,58 @@ body{
 	margin-top: 75px;
 }
 
+#hello-msg{
+	padding-top: 50px;
+	text-align: center;
+	display: table;
+	margin: auto;
+}
+
+#hello-msg > div{
+	float: left;
+}
+
+#hello-img{
+	width: 200px;
+	height: 200px;
+	margin: auto;
+	background-image: url(resource/add.png);
+	background-size: cover;
+}
+
+#question-img{
+	width: 200px;
+	height: 200px;
+	margin: auto;
+	background-image: url(resource/question.png);
+	background-size: cover;
+}
+
+
+
 #subui-wrap{
 	position: absolute;
 	top: 20px;
 	left: 20px;
+	z-index: 999;
 }
+
+.hint-wrap{
+	position: absolute;
+	top: 20px;
+	left: 20px;
+	z-index: 999;	
+}
+
+#single-op-wrap{
+	right: 20px;
+	left: inherit;
+}
+
+#numeric-ui-wrap{
+	opacity: 0;
+}
+
 
 .subui{
 	width: 100px;
@@ -22,6 +69,18 @@ body{
 	text-align: center;
 	line-height: 185px;
 }
+
+.hint{
+	width: 70px;
+	height: 70px;
+	/*background-color: red;*/
+	float: left;
+	margin-right: 7px;
+	text-align: center;
+	line-height: 125px;
+	font-size: 12px;
+}
+
 
 .video-overlay {
     /*background-color: transparent;*/
@@ -42,5 +101,42 @@ body{
 	top: 0;
 	left: 0;
 	z-index: 1000;
+}
+
+
+
+#tutorial-overlay{
+
+	position: fixed;
+	top: 0;
+
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0,0,0, 0.8);
+	padding-top: 40px;
+	padding-bottom: 40px;
+
+	z-index: 999;
+	opacity: 0;
+}
+
+#tutorial-content{
+
+	width: 70%;
+	margin: auto;
+	border-radius: 10px;
+	background-color: white;
+	padding: 15px 0px 15px 0px;
+	height: 80vh;
+
+	overflow: scroll;
+}
+
+#tutorial-content h1{
+	text-align: center;
+}
+
+#tutorial-content p{
+	line-height: 17px;
 }
 

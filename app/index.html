@@ -9,11 +9,12 @@
 
 	<link rel="stylesheet" href="style.css">
 
-	<script
+	<!-- <script
   src="https://code.jquery.com/jquery-3.1.1.js"
   integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA="
-  crossorigin="anonymous"></script>
+  crossorigin="anonymous"></script> -->
 	<script type="text/javascript" src="lib/dollar.js"></script>
+	<script type="text/javascript" src="lib/jquery.js"></script>
 
 </head>
 <body onload="onLoadEvent()">
@@ -26,22 +27,69 @@
 			<span style="background-color:#ffff88;">The &lt;canvas&gt; element is not supported by this browser.</span>
 		</canvas>
 	</div>
-	<div id="subui-wrap">
-		<div id="seek-hint" class="subui" style="background-image: url(resource/seek.png); background-size: cover;">Seek</div>
-		<div id="volume-hint" class="subui" style="background-image: url(resource/volume.png); background-size: cover;">Volume</div>
-		<div id="playback-rate-hint" class="subui" style="background-image: url(resource/speed.png); background-size: cover;">Speed</div>
-		<div id="size-hint" class="subui" style="background-image: url(resource/size.png); background-size: cover;">Size</div>
+
+	<div id="selectui-wrap" class="hint-wrap">
+		<div id="arrow-hint" class="hint" style="background-image: url(resource/arrow.png); background-size: cover;">Navigate</div>
+		<div id="all-hint"   class="hint" style="background-image: url(resource/all.png);   background-size: cover;">Select All</div>
+	</div>
+
+	<div id="single-op-wrap" class="hint-wrap">
+		<div class="hint" style="background-image: url(resource/play.png);   background-size: cover;">Play   </div>
+		<div class="hint" style="background-image: url(resource/pause.png);  background-size: cover;">Pause  </div>
+		<div class="hint" style="background-image: url(resource/delete.png); background-size: cover;">Delete </div>
+		<div class="hint" style="background-image: url(resource/mute.png);   background-size: cover;">Mute   </div>
+	</div>
+
+	<div id="subui-wrap" class="hint-wrap">
+		<div class="hint" style="background-image: url(resource/seek.png);   background-size: cover;">Seek  </div>
+		<div class="hint" style="background-image: url(resource/volume.png); background-size: cover;">Volume</div>
+		<div class="hint" style="background-image: url(resource/speed.png);  background-size: cover;">Speed </div>
+		<div class="hint" style="background-image: url(resource/size.png);   background-size: cover;">Size  </div>
+	</div>
+
+	<div id="numeric-ui-wrap" class="hint-wrap">
+		<div id="up-hint"   class="hint" style="background-image: url(resource/up.png);   background-size: cover;">Add(->)</div>
+		<div id="down-hint" class="hint" style="background-image: url(resource/down.png); background-size: cover;">Reduce(<-)</div>
 	</div>
 
 	<div class="container">
+		<div id="hello-msg">
+			<div>
+				<h3>Write "A" on the screen to add video</h3>
+				<div id="hello-img"></div>
+			</div>
+			<div>
+				<h3>or "Q" for tutorial</h3>
+				<div id="question-img"></div>
+			</div>
+		</div>
 	</div>
 
-<!-- 	<div id="video-source">
-		<video id="video" controls="" preload="none" mediagroup="myVideoGroup" poster="http://images2.itechpost.com/data/images/full/37245/piko-taro-ppap.jpg">
-			<source id="src-mp4" src="https://video.xx.fbcdn.net/v/t43.1792-2/14439457_1670493943279877_6211803525098242048_n.mp4?efg=eyJybHIiOjE1MDAsInJsYSI6MTAyNCwidmVuY29kZV90YWciOiJzdmVfaGQifQ%3D%3D&rl=1500&vabr=846&oh=8752f9aed4970de1dbb4d0e9201be357&oe=582BA419" type="video/mp4">
-		</video>
+
+
+	<div id="tutorial-overlay">
+		<div id="tutorial-content">
+			<h1> How to use this PPAP MVP? </h1>
+			<div style="margin-left: 30px; margin-right: 30px;">
+				<p>This is a multiple video player that can only be controlled by gestures. All gestures has to be completed in a <strong>single stroke</strong>!</p>
+				<h3>Adding a video</h3>
+				<p>First of all, you will need a video that you want to control, so please start by writing <img src="resource/add.png" alt="Add" style="width: 40px; height: 40px; "> on any part of the screen.</p>
+
+				<h3>Play a video</h3>
+				<p>In order to play the video, you'll have to tell the software that you're now going to decide which video to operate on therefor please draw an arrow like <img src="resource/arrow.png" alt="->" style="width: 40px; height: 40px; "> on the screen in a single stroke.</p>
+
+				<p>The first video will respond with an color animation, which indicates that you're now able to operate on this video. Now you're ready to draw a <img src="resource/play.png" alt="triangle" style="width: 40px; height: 40px; "> to let the player play this video for you.</p>
+				<p>PS. don't worry, we'll put all the possible gestures on the top of the screen so you know what you can do at that moment.</p>
+
+				<h3>Resize all the videos</h3>
+				<p> Add several videos by using the <img src="resource/add.png" alt="Add" style="width: 40px; height: 40px; "> gesture multiple times. Now draw a <img src="resource/all.png" alt="Circle" style="width: 40px; height: 40px; "> to select all of the videos. Because you want to modify(might be increase or decrease) a specific value of the video(rather than asking to play or pause), you have to tell PPAP MVP you want to resize by drawing a <img src="resource/size.png" alt="Star" style="width: 40px; height: 40px; "> on the canvas. Now you can draw <img src="resource/up.png" alt="^" style="width: 40px; height: 40px; "> to enlarge and <img src="resource/down.png" alt="V" style="width: 40px; height: 40px; "> to shrink all the videos.</p>
+
+				<p>Advanced Usage: Write down 4 to add 4 videos at once.</p>
+
+			</div>
+
+		</div>
 	</div>
- -->
 
 
 	<!-- <script src="bundle.js"></script> -->
