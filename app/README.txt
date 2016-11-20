@@ -1,13 +1,14 @@
 # MVP
 
+
+## I recommand reading this readme [here](https://github.com/mw10104587/MultipleVideoPlayer/tree/master/app).
+
+
 ## How to run the app
 Open up [index.html](./html).
 There are only **3** dependencies for this file.
 2 js files including `script.js` and `dollar.js`.
 1 css file: `style.css`
-```PLEASE USE THE LATEST VERSION OF BROWSER TO SUPPORT ES6 CODE```
-
-
 
 ## Design Process
 ### The video interface

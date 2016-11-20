@@ -322,7 +322,9 @@ const VC = {
 		document.getElementById("hello-msg").style.display = "none";
 
 		// const POSTER_URL = "http://images2.itechpost.com/data/images/full/37245/piko-taro-ppap.jpg";
-		const POSTER_URL = "resource/ppap-poster.jpg";
+		// const POSTER_URL = "resource/ppap-poster.jpg";
+		const POSTER_URL = "https://media.w3.org/2010/05/sintel/poster.png";
+		const VIDEO_URL = "https://media.w3.org/2010/05/sintel/trailer.mp4";
 
 		let videoWrap = document.createElement("div");
 		videoWrap.setAttribute("class", "video-wrap");
@@ -340,7 +342,8 @@ const VC = {
 		video.setAttribute("preload", "none");
 		video.setAttribute("poster", POSTER_URL);
 		video.width = this.videoWidth;
-		video.src = "./resource/ppap.mp4";
+		// video.src = "./resource/ppap.mp4";
+		video.src = VIDEO_URL;
 		video.autoplay = false;
 
 		videoWrap.appendChild(videoOverlay);
